@@ -1,0 +1,10 @@
+usage: ta [-h] [--version] [prompt ...]
+
+term-assist: an AI assistant for your terminal.
+
+positional arguments:
+  prompt      prompt for the AI model
+
+options:
+  -h, --help  show this help message and exit
+  --version   display the program version
