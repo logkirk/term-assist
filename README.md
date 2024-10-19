@@ -47,15 +47,18 @@ Usage
 -----
 
 ```
-usage: ta [-h] prompt [prompt ...]
+usage: ta [-h] [--version] [--model MODEL] [prompt ...]
 
 term-assist: an AI assistant for your terminal.
 
 positional arguments:
-  prompt      prompt for the AI model
+  prompt                prompt for the AI model
 
 options:
-  -h, --help  show this help message and exit
+  -h, --help            show this help message and exit
+  --version             display the program version
+  --model MODEL, -m MODEL
+                        specify a model to use in the format BRAND:MODEL (overrides the setting in your config file)
 ```
 
 ### Examples
@@ -66,6 +69,10 @@ options:
 
 ```
 > ta how to exit vim
+```
+
+```
+> ta --model openai:gpt-4o follow a file as it updates
 ```
 
 Configuration

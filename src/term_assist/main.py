@@ -50,6 +50,10 @@ def main():
     config, models = _load_config()
     system, shell = _load_environment()
 
+    # If the `model` arg is passed, prefer that over the config file
+    if args.model:
+        config["model"] = args.model[0]
+
     try:
         brand, brand_model = config["model"].split(":")
         config["model"] = brand_model
@@ -89,6 +93,15 @@ def _parse_args() -> tuple[ArgumentParser, Namespace]:
     )
     arg_parser.add_argument(
         "--version", action="store_true", help="display the program version"
+    )
+    arg_parser.add_argument(
+        "--model",
+        "-m",
+        action="store",
+        nargs=1,
+        type=str,
+        help="specify a model to use in the format BRAND:MODEL (overrides the setting "
+        "in your config file)",
     )
     return arg_parser, arg_parser.parse_args()
 
