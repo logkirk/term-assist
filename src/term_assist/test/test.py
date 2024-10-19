@@ -50,3 +50,12 @@ class TestCLI:
         run_cmd(f"ta", raise_on_failure=True)
         out, _ = read_std_and_rewrite(capfd)
         assert out == help_text
+
+    def test_basic_prompt(self, capfd):
+        with open(data_dir / "help.txt", "r") as f:
+            help_text = f.read()
+
+        run_cmd(f"ta unzip a tgz archive", raise_on_failure=True)
+        out, _ = read_std_and_rewrite(capfd)
+        assert out != ""
+        assert out != help_text
