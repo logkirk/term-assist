@@ -29,13 +29,13 @@ class OpenAIModel(Model):
         client = OpenAI()
 
         completion = client.chat.completions.create(
-            model=self.models["openai"][self.config["model"]],
-            max_tokens=self.config["max_tokens"],
-            temperature=self.config["temperature"],
+            model=self.models["openai"][self.config["ai"]["model"]],
+            max_tokens=self.config["ai"]["max_tokens"],
+            temperature=self.config["ai"]["temperature"],
             messages=[
                 {
                     "role": "system",
-                    "content": self.config["system_prompt"].format(
+                    "content": self.config["ai"]["system_prompt"].format(
                         system=self.system, shell=self.shell
                     ),
                 },

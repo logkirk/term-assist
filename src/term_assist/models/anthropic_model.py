@@ -27,10 +27,10 @@ class AnthropicModel(Model):
 
     def message(self, prompt):
         message = self.client.messages.create(
-            model=self.models["anthropic"][self.config["model"]],
-            max_tokens=self.config["max_tokens"],
-            temperature=self.config["temperature"],
-            system=self.config["system_prompt"].format(
+            model=self.models["anthropic"][self.config["ai"]["model"]],
+            max_tokens=self.config["ai"]["max_tokens"],
+            temperature=self.config["ai"]["temperature"],
+            system=self.config["ai"]["system_prompt"].format(
                 system=self.system, shell=self.shell
             ),
             messages=[{"role": "user", "content": prompt}],

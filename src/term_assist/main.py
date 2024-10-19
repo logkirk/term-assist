@@ -25,6 +25,7 @@ from pathlib import Path
 from shutil import copy
 from subprocess import run
 
+import pyperclip
 from yaml import safe_load
 
 from term_assist.models.anthropic_model import AnthropicModel
@@ -52,31 +53,42 @@ def main():
 
     # If the `model` arg is passed, prefer that over the config file
     if args.model:
-        config["model"] = args.model[0]
+        config["ai"]["model"] = args.model[0]
 
     try:
-        brand, brand_model = config["model"].split(":")
-        config["model"] = brand_model
+        brand, brand_model = config["ai"]["model"].split(":")
+        config["ai"]["model"] = brand_model
     except ValueError as e:
-        if len(config["model"].split(":")) < 2:
+        if len(config["ai"]["model"].split(":")) < 2:
             raise ValueError(
-                f"Cannot parse model string '{config["model"]}'. Check configuration "
+                f"Cannot parse model string '{config["ai"]["model"]}'. Check configuration "
                 f"file and ensure model brand and model type are separated by ':'."
             ) from e
         else:
             raise ValueError(
-                f"Cannot parse model string '{config["model"]}'. Check configuration "
+                f"Cannot parse model string '{config["ai"]["model"]}'. Check configuration "
                 f"file."
             ) from e
 
-    if brand == "openai":
-        model = OpenAIModel(config, models, system, shell)
-    elif brand == "anthropic":
-        model = AnthropicModel(config, models, system, shell)
-    else:
-        raise ValueError(f"Unknown brand '{brand}'. Check configuration file.")
+    if not config["debug"]["no_ai"]:
+        if brand == "openai":
+            model = OpenAIModel(config, models, system, shell)
+        elif brand == "anthropic":
+            model = AnthropicModel(config, models, system, shell)
+        else:
+            raise ValueError(f"Unknown brand '{brand}'. Check configuration file.")
 
-    print(model.message(prompt=" ".join(args.prompt)))
+        response = model.message(prompt=" ".join(args.prompt))
+    else:
+        response = "echo Hello world!"
+
+    if config["behavior"]["auto_copy"]:
+        pyperclip.copy(response)
+
+    if config["behavior"]["auto_paste"]:
+        print(response)
+    else:
+        print(response)
 
 
 def _parse_args() -> tuple[ArgumentParser, Namespace]:

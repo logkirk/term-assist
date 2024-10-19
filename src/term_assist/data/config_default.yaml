@@ -1,7 +1,45 @@
-model: anthropic:sonnet-3.5
-max_tokens: 1000
-temperature: 0.0
-system_prompt: You are an assistant in a terminal window. Your system is
-  {system} and shell is {shell}. Your responses should be relevant to this
-  environment. Respond as succinctly as possible. If the response is primarily
-  a terminal command, respond only with that command and no other text.
+##################
+# AI configuration
+##################
+ai:
+  # The AI model to use.
+  #
+  # This parameter should be set in the format `BRAND:MODEL`. For example,
+  # to use OpenAI's GPT-4o model, set this parameter
+  # to `openai:gpt-4o`.
+  #
+  # See `~/.config/term-assist/models.json` for available models.
+  model: anthropic:sonnet-3.5
+
+  # The maximum number of tokens that will be generated for output.
+  max_tokens: 1000
+
+  # The amount of randomness injected into the response. Ranges from 0.0 to 1.0.
+  temperature: 0.0
+
+  # The system prompt that is given to the model.
+  #
+  # This prompt must contain the format strings `{system}` and `{shell}`,
+  # which the program will replace with information it gathers from your
+  # system.
+  system_prompt: You are an assistant in a terminal window. Your system is
+    {system} and shell is {shell}. Your responses should be relevant to this
+    environment. Respond as succinctly as possible. If the response is primarily
+    a terminal command, respond only with that command and no other text.
+
+################################
+# Program behavior configuration
+################################
+behavior:
+  # If true, automatically copy the AI's response to your clipboard
+  auto_copy: false
+
+  # If true, automatically paste the AI's response so it is ready to execute
+  auto_paste: false
+
+###############
+# Debug options
+###############
+debug:
+    # If true, return a fake response instead of sending a request to the AI
+    no_ai: false
