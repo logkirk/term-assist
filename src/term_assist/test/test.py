@@ -17,8 +17,15 @@ term-assist. If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 
-from term_assist.test.base import project_dir, run_cmd, data_dir, read_std_and_rewrite
+from yaml import safe_load
 
+from term_assist.test.base import (
+    project_dir,
+    run_cmd,
+    test_data_dir,
+    read_std_and_rewrite,
+    data_dir,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +43,7 @@ class TestInstall:
 
 class TestCLI:
     def test_help(self, capfd):
-        with open(data_dir / "help.txt", "r") as f:
+        with open(test_data_dir / "help.txt", "r") as f:
             help_text = f.read()
 
         run_cmd(f"ta -h", raise_on_failure=True)
@@ -52,10 +59,36 @@ class TestCLI:
         assert out == help_text
 
     def test_basic_prompt(self, capfd):
-        with open(data_dir / "help.txt", "r") as f:
+        with open(test_data_dir / "help.txt", "r") as f:
             help_text = f.read()
 
         run_cmd(f"ta unzip a tgz archive", raise_on_failure=True)
         out, _ = read_std_and_rewrite(capfd)
         assert out != ""
         assert out != help_text
+
+
+class TestModels:
+    def test_models_short(self, capfd):
+        with open(data_dir / "models.yaml", "r") as f:
+            models = safe_load(f)
+
+        model_strings = []
+        for brand, models_dict in models.items():
+            for model in models_dict.keys():
+                model_strings.append(f"{brand}:{model}")
+
+        responses = []
+        for model in model_strings:
+            logger.info(f"Testing model '{model}'")
+            run_cmd(f"ta --model {model} unzip a tgz archive", raise_on_failure=True)
+            out, _ = read_std_and_rewrite(capfd)
+            responses.append(out)
+            logger.info(f"Response: '{out}'")
+
+            # Verify the response is not empty
+            assert out != ""
+
+        # Verify that not all strings are exactly the same (would likely indicate the
+        # --model arg is not working)
+        assert len(set(responses)) > 1

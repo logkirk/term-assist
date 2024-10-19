@@ -20,10 +20,11 @@ from pathlib import Path
 from subprocess import run
 from sys import stdout, stderr
 
-test_dir = Path(__file__).parent
-data_dir = Path(__file__).parent / "data"
-src_dir = Path(__file__).parents[2]
 project_dir = Path(__file__).parents[3]
+src_dir = Path(__file__).parents[2]
+data_dir = Path(__file__).parents[1] / "data"
+test_dir = Path(__file__).parent
+test_data_dir = Path(__file__).parent / "data"
 
 logger = logging.getLogger(__name__)
 
