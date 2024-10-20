@@ -25,6 +25,7 @@ from pathlib import Path
 from shutil import copy
 from subprocess import run
 
+import keyboard
 import pyperclip
 from yaml import safe_load
 
@@ -82,12 +83,26 @@ def main():
     else:
         response = "echo Hello world!"
 
+    print_response = True
     if config["behavior"]["auto_copy"]:
         pyperclip.copy(response)
 
-    if config["behavior"]["auto_paste"]:
-        print(response)
-    else:
+        os_ = platform.system()
+        if config["behavior"]["auto_paste"]:
+            if os_ == "Darwin":
+                keyboard.send(55, do_press=True, do_release=False)
+                keyboard.send(9, do_press=True, do_release=True)
+                keyboard.send(55, do_press=False, do_release=True)
+            elif os_ in ["Linux", "Windows"]:
+                keyboard.send("ctrl+v")
+            else:
+                raise RuntimeError(
+                    f"Your operating system ({os_}) does not support auto_paste. "
+                    f"Please disable it in your configuration file."
+                )
+            print_response = False
+
+    if print_response:
         print(response)
 
 

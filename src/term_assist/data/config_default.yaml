@@ -34,7 +34,8 @@ behavior:
   # If true, automatically copy the AI's response to your clipboard
   auto_copy: false
 
-  # If true, automatically paste the AI's response so it is ready to execute
+  # If true (and if auto_copy is true), automatically paste the AI's response
+  # so it is ready to execute
   auto_paste: false
 
 ###############
