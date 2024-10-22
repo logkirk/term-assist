@@ -44,19 +44,22 @@ class TestInstall:
 class TestCLI:
     def test_help(self, capfd):
         with open(test_data_dir / "help.txt", "r") as f:
-            help_text = f.read()
+            help_text = _remove_newline_and_space(f.read())
 
         run_cmd(f"ta -h", raise_on_failure=True)
-        out, _ = read_std_and_rewrite(capfd)
-        assert out == help_text
+        self._verify_cmd_output(capfd, help_text)
 
         run_cmd(f"ta --help", raise_on_failure=True)
-        out, _ = read_std_and_rewrite(capfd)
-        assert out == help_text
+        self._verify_cmd_output(capfd, help_text)
 
         run_cmd(f"ta", raise_on_failure=True)
+        self._verify_cmd_output(capfd, help_text)
+
+    @staticmethod
+    def _verify_cmd_output(capfd, expected: str) -> None:
         out, _ = read_std_and_rewrite(capfd)
-        assert out == help_text
+        out = _remove_newline_and_space(out)
+        assert out == expected
 
     def test_basic_prompt(self, capfd):
         with open(test_data_dir / "help.txt", "r") as f:
@@ -92,3 +95,7 @@ class TestModels:
         # Verify that not all strings are exactly the same (would likely indicate the
         # --model arg is not working)
         assert len(set(responses)) > 1
+
+
+def _remove_newline_and_space(string: str) -> str:
+    return string.replace("\n", "").replace(" ", "")

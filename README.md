@@ -26,6 +26,8 @@ Features
   response length, and other parameters
 - **Automatic environment detection**: automatically detects your system
   and shell environment for accurate responses
+- **Automatic copy and paste**: optionally copies the generated response
+  to the clipboard and pastes it in your terminal, ready to execute
 
 Installation
 ------------
@@ -85,7 +87,9 @@ parameters if it does not already exist.
 See `~/.config/term-assist/config_default.json` for the default
 configuration.
 
-### `model`
+### AI configuration
+
+#### model
 
 The AI model to use.
 
@@ -95,19 +99,30 @@ to `openai:gpt-4o`.
 
 See `~/.config/term-assist/models.json` for available models.
 
-### `max_tokens`
+#### max_tokens
 
 The maximum number of tokens that will be generated for output.
 
-### `temperature`
+#### temperature
 
 The amount of randomness injected into the response. Ranges from 0.0 to
 1.0.
 
-### `system_prompt`
+#### system_prompt
 
 The system prompt that is given to the model.
 
 This prompt must contain the format strings `{system}` and `{shell}`,
 which the program will replace with information it gathers from your
 system.
+
+### Program behavior configuration
+
+#### auto_copy
+
+If true, automatically copy the AI's response to your clipboard.
+
+#### auto_paste
+
+If true (and if auto_copy is true), automatically paste the AI's 
+response so it is ready to execute.

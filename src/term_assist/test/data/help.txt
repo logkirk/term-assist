@@ -1,10 +1,12 @@
-usage: ta [-h] [--version] [prompt ...]
+usage: ta [-h] [--version] [--model MODEL] [prompt ...]
 
 term-assist: an AI assistant for your terminal.
 
 positional arguments:
-  prompt      prompt for the AI model
+  prompt                prompt for the AI model
 
 options:
-  -h, --help  show this help message and exit
-  --version   display the program version
+  -h, --help            show this help message and exit
+  --version             display the program version
+  --model MODEL, -m MODEL
+                        specify a model to use in the format BRAND:MODEL (overrides the setting in your config file)
