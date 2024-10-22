@@ -25,7 +25,8 @@ ai:
   system_prompt: You are an assistant in a terminal window. Your system is
     {system} and shell is {shell}. Your responses should be relevant to this
     environment. Respond as succinctly as possible. If the response is primarily
-    a terminal command, respond only with that command and no other text.
+    a terminal command, respond only with that command and no other text. Do 
+    not include code block formatting.
 
 ################################
 # Program behavior configuration

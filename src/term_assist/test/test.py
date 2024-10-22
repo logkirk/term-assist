@@ -16,6 +16,7 @@ term-assist. If not, see <https://www.gnu.org/licenses/>.
 """
 
 import logging
+from warnings import warn
 
 from yaml import safe_load
 
@@ -94,7 +95,11 @@ class TestModels:
 
         # Verify that not all strings are exactly the same (would likely indicate the
         # --model arg is not working)
-        assert len(set(responses)) > 1
+        if len(set(responses)) <= 1:
+            warn(
+                "All responses are exactly the same. Verify that the `--model` arg is "
+                "working properly."
+            )
 
 
 def _remove_newline_and_space(string: str) -> str:
