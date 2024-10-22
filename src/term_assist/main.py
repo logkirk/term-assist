@@ -23,6 +23,7 @@ from importlib.metadata import version
 from importlib.resources import files
 from pathlib import Path
 from shutil import copy
+from stat import S_IREAD, S_IXUSR
 from subprocess import run
 
 import keyboard
@@ -32,10 +33,15 @@ from yaml import safe_load
 from term_assist.models.anthropic_model import AnthropicModel
 from term_assist.models.openai_model import OpenAIModel
 
-config_dir = Path.home() / ".config" / "term-assist"
-config_file = config_dir / "config.yaml"
-config_default_file = config_dir / "config_default.yaml"
-models_file = config_dir / "models.yaml"
+user_config_dir = Path.home() / ".config" / "term-assist"
+user_config_file = user_config_dir / "config.yaml"
+
+# files() gets a MultiplexedPath here even though there is only one data dir. As a
+# workaround, we need to access the protected attribute `_paths`.
+data_dir = files("term_assist.data")._paths[0]  # noqa
+
+config_default_file = data_dir.joinpath("config_default.yaml")
+models_file = data_dir.joinpath("models.yaml")
 
 
 def main():
@@ -134,25 +140,29 @@ def _parse_args() -> tuple[ArgumentParser, Namespace]:
 
 
 def _initialize_config():
-    # Create our config directory if it does not exist
-    if not config_dir.exists():
-        config_dir.mkdir(parents=True, exist_ok=True)
+    new_config = False
 
-    # Copy over data files for easier user access
-    for file in [config_default_file, models_file]:
-        if not file.exists():
-            copy(
-                src=str(files("term_assist.data").joinpath(file.name)),
-                dst=file,
-            )
+    # Create our config directory if it does not exist
+    if not user_config_dir.exists():
+        new_config = True
+        user_config_dir.mkdir(parents=True, exist_ok=True)
+
+        # Since this is a new config, let's set file permissions too
+        for file in data_dir.iterdir():
+            os.chmod(file, S_IREAD)
+        os.chmod(data_dir, S_IREAD | S_IXUSR)
+
+    # Symlink data folder for easier user access
+    if new_config or not user_config_dir.joinpath("data").exists(follow_symlinks=False):
+        os.symlink(data_dir, user_config_dir / "data", target_is_directory=True)
 
     # Copy default config if user config does not exist
-    if not config_file.exists():
-        copy(src=config_default_file, dst=config_file)
+    if new_config or not user_config_file.exists():
+        copy(src=config_default_file, dst=user_config_file)
 
 
 def _load_config():
-    with open(config_file, "r") as f:
+    with open(user_config_file, "r") as f:
         config = safe_load(f)
     with open(models_file, "r") as f:
         models = safe_load(f)
