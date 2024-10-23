@@ -10,3 +10,4 @@ dist
 *.xml
 config.yaml
 .DS_Store
+.env
