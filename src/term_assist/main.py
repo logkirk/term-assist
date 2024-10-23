@@ -56,7 +56,12 @@ def main():
         exit(0)
 
     config, models = _load_config()
-    system, shell = _load_environment()
+
+    if args.environment:
+        environment = "Your environment is " + args.environment[0]
+    else:
+        system, shell = _load_environment()
+        environment = f"Your system is {system} and shell is {shell}."
 
     # If the `model` arg is passed, prefer that over the config file
     if args.model:
@@ -79,9 +84,9 @@ def main():
 
     if not config["debug"]["no_ai"]:
         if brand == "openai":
-            model = OpenAIModel(config, models, system, shell)
+            model = OpenAIModel(config, models, environment)
         elif brand == "anthropic":
-            model = AnthropicModel(config, models, system, shell)
+            model = AnthropicModel(config, models, environment)
         else:
             raise ValueError(f"Unknown brand '{brand}'. Check configuration file.")
 
@@ -135,6 +140,14 @@ def _parse_args() -> tuple[ArgumentParser, Namespace]:
         type=str,
         help="specify a model to use in the format BRAND:MODEL (overrides the setting "
         "in your config file)",
+    )
+    arg_parser.add_argument(
+        "--environment",
+        "-e",
+        action="store",
+        nargs=1,
+        type=str,
+        help="specify environment details (overrides automatic environment detection)",
     )
     return arg_parser, arg_parser.parse_args()
 

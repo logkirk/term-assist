@@ -19,14 +19,13 @@ ai:
 
   # The system prompt that is given to the model.
   #
-  # This prompt must contain the format strings `{system}` and `{shell}`,
-  # which the program will replace with information it gathers from your
-  # system.
-  system_prompt: You are an assistant in a terminal window. Your system is
-    {system} and shell is {shell}. Your responses should be relevant to this
-    environment. Respond as succinctly as possible. If the response is primarily
-    a terminal command, respond only with that command and no other text. Do 
-    not include code block formatting.
+  # Automatically collected information about your system environment will
+  # be appended to the end of the string. This information can be overridden
+  # using the `--environment/-e` command.
+  system_prompt: You are an assistant in a terminal window. Your responses
+    should be relevant to this environment. Respond as succinctly as possible.
+    If the response is primarily a terminal command, respond only with that
+    command and no other text. Do not include code block formatting.
 
 ################################
 # Program behavior configuration
@@ -43,5 +42,5 @@ behavior:
 # Debug options
 ###############
 debug:
-    # If true, return a fake response instead of sending a request to the AI
-    no_ai: false
+  # If true, return a fake response instead of sending a request to the AI
+  no_ai: false

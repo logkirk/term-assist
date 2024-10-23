@@ -1,4 +1,4 @@
-usage: ta [-h] [--version] [--model MODEL] [prompt ...]
+usage: ta [-h] [--version] [--model MODEL] [--environment ENVIRONMENT] [prompt ...]
 
 term-assist: an AI assistant for your terminal.
 
@@ -10,3 +10,5 @@ options:
   --version             display the program version
   --model MODEL, -m MODEL
                         specify a model to use in the format BRAND:MODEL (overrides the setting in your config file)
+  --environment ENVIRONMENT, -e ENVIRONMENT
+                        specify environment details (overrides automatic environment detection)

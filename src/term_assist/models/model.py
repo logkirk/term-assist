@@ -19,11 +19,10 @@ from abc import ABC, abstractmethod
 
 
 class Model(ABC):
-    def __init__(self, config, models, system, shell):
+    def __init__(self, config, models, environment):
         self.config = config
         self.models = models
-        self.system = system
-        self.shell = shell
+        self.environment = environment
         self.client = None
 
     @abstractmethod

@@ -21,8 +21,8 @@ from term_assist.models.model import Model
 
 
 class AnthropicModel(Model):
-    def __init__(self, config, models, system, shell):
-        super().__init__(config, models, system, shell)
+    def __init__(self, config, models, environment):
+        super().__init__(config, models, environment)
         self.client = Anthropic()
 
     def message(self, prompt):
@@ -30,9 +30,7 @@ class AnthropicModel(Model):
             model=self.models["anthropic"][self.config["ai"]["model"]],
             max_tokens=self.config["ai"]["max_tokens"],
             temperature=self.config["ai"]["temperature"],
-            system=self.config["ai"]["system_prompt"].format(
-                system=self.system, shell=self.shell
-            ),
+            system=self.config["ai"]["system_prompt"] + " " + self.environment,
             messages=[{"role": "user", "content": prompt}],
         )
 

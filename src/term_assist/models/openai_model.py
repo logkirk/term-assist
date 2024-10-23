@@ -21,8 +21,8 @@ from term_assist.models.model import Model
 
 
 class OpenAIModel(Model):
-    def __init__(self, config, models, system, shell):
-        super().__init__(config, models, system, shell)
+    def __init__(self, config, models, environment):
+        super().__init__(config, models, environment)
         self.client = OpenAI()
 
     def message(self, prompt):
@@ -35,9 +35,9 @@ class OpenAIModel(Model):
             messages=[
                 {
                     "role": "system",
-                    "content": self.config["ai"]["system_prompt"].format(
-                        system=self.system, shell=self.shell
-                    ),
+                    "content": self.config["ai"]["system_prompt"]
+                    + " "
+                    + self.environment,
                 },
                 {"role": "user", "content": prompt},
             ],

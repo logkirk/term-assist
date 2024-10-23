@@ -49,7 +49,8 @@ Usage
 -----
 
 ```
-usage: ta [-h] [--version] [--model MODEL] [prompt ...]
+usage: ta [-h] [--version] [--model MODEL] [--environment ENVIRONMENT]
+          [prompt ...]
 
 term-assist: an AI assistant for your terminal.
 
@@ -60,21 +61,35 @@ options:
   -h, --help            show this help message and exit
   --version             display the program version
   --model MODEL, -m MODEL
-                        specify a model to use in the format BRAND:MODEL (overrides the setting in your config file)
+                        specify a model to use in the format
+                        BRAND:MODEL (overrides the setting in your
+                        config file)
+  --environment ENVIRONMENT, -e ENVIRONMENT
+                        specify environment details (overrides
+                        automatic environment detection)
 ```
 
 ### Examples
+
+#### Basic prompt
 
 ```
 > ta unzip a tgz archive
 ```
 
-```
-> ta how to exit vim
-```
+#### Override AI model configuration
 
 ```
 > ta --model openai:gpt-4o follow a file as it updates
+> ta -m ...
+```
+
+#### Override environment detection
+
+```
+> ta --environment "windows 95 dos" list com ports
+> ta --environment bash list free drive space
+> ta -e ...
 ```
 
 Configuration
@@ -112,9 +127,9 @@ The amount of randomness injected into the response. Ranges from 0.0 to
 
 The system prompt that is given to the model.
 
-This prompt must contain the format strings `{system}` and `{shell}`,
-which the program will replace with information it gathers from your
-system.
+Automatically collected information about your system environment will
+be appended to the end of the string. This information can be overridden
+using the `--environment/-e` command.
 
 ### Program behavior configuration
 
@@ -133,7 +148,7 @@ Testing
 Module tests are located in the `src/term_assist/test/` directory.
 
 1. [Install docker](https://docs.docker.com/engine/install/).
-2. Run `run.sh`, which will build the docker image and initiate testing 
+2. Run `run.sh`, which will build the docker image and initiate testing
    inside a container.
 3. Results will be copied to an `src/term_assist/test/output` in both
    XML and plaintext log format.
