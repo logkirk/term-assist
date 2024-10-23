@@ -124,5 +124,16 @@ If true, automatically copy the AI's response to your clipboard.
 
 #### auto_paste
 
-If true (and if auto_copy is true), automatically paste the AI's 
+If true (and if auto_copy is true), automatically paste the AI's
 response so it is ready to execute.
+
+Testing
+-------
+
+Module tests are located in the `src/term_assist/test/` directory.
+
+1. [Install docker](https://docs.docker.com/engine/install/).
+2. Run `run.sh`, which will build the docker image and initiate testing 
+   inside a container.
+3. Results will be copied to an `src/term_assist/test/output` in both
+   XML and plaintext log format.
